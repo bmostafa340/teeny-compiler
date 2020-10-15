@@ -20,7 +20,10 @@ void header(void) {
         ".text\n"
         ".globl basic_main\n"
         "basic_main:\n"
-        "    # The main() function\n");
+        "    # The main() function\n"
+        "    pushq %%rbp\n"
+        "    mov %%rsp, %%rbp\n"
+        "    subq $208, %%rsp\n");
 }
 
 /**
@@ -29,7 +32,8 @@ void header(void) {
  * goes between the header and the footer.
  */
 void footer(void) {
-    printf("    ret\n");
+    printf("    leaveq\n");
+    printf("    retq\n");
 }
 
 int main(int argc, char *argv[]) {
