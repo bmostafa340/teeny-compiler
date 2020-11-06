@@ -23,7 +23,12 @@ void header(void) {
         "    # The main() function\n"
         "    pushq %%rbp\n"
         "    mov %%rsp, %%rbp\n"
-        "    subq $208, %%rsp\n");
+        "    subq $208, %%rsp\n"
+        "    push %%rbx\n"
+        "    push %%r12\n"
+        "    push %%r13\n"
+        "    push %%r14\n"
+        "    push %%r15\n");
 }
 
 /**
@@ -32,8 +37,14 @@ void header(void) {
  * goes between the header and the footer.
  */
 void footer(void) {
-    printf("    leaveq\n");
-    printf("    retq\n");
+    printf(
+        "    pop %%r15\n"
+        "    pop %%r14\n"
+        "    pop %%r13\n"
+        "    pop %%r12\n"
+        "    pop %%rbx\n"
+        "    leaveq\n"
+        "    retq\n");
 }
 
 int main(int argc, char *argv[]) {

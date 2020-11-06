@@ -410,6 +410,7 @@ void choose_vars(uint8_t *counts, uint8_t *top_counts, char *top_vars) {
     }
 }
 
+/*
 void callee_save(register_data *data, uint8_t len_init_var_regs, char **init_var_regs) {
     char illegal[5] = {0};
     for (int8_t i = 0; i < len_init_var_regs; i++) {
@@ -442,7 +443,9 @@ void callee_save(register_data *data, uint8_t len_init_var_regs, char **init_var
         }
     }
 }
+*/
 
+/*
 void callee_recall(register_data *data, uint8_t len_init_var_regs, char **init_var_regs) {
     char illegal[5] = {0};
     for (int8_t i = 0; i < len_init_var_regs; i++) {
@@ -473,6 +476,7 @@ void callee_recall(register_data *data, uint8_t len_init_var_regs, char **init_v
         }
     }
 }
+*/
 
 // Sets up a register_data struct that includes the registers used to store
 // the more frequently appearing variables, as well as the registers used in
@@ -517,11 +521,11 @@ bool compile_ast(node_t *node) {
     data.num_vars = num_vars;
     data.vars = top_vars;
 
-    callee_save(&data, len_init_var_regs, init_var_regs);
+    // callee_save(&data, len_init_var_regs, init_var_regs);
 
     bool result = compile_recursive(node, &data);
 
-    callee_recall(&data, len_init_var_regs, init_var_regs);
+    // callee_recall(&data, len_init_var_regs, init_var_regs);
 
     free(virtual_stack);
     free(var_regs);
