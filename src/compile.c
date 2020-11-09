@@ -49,20 +49,19 @@ void push_var(char name, register_data *data) {
     int16_t var_index = find_var(name, data);
     if (var_index >= 0) {
         if (data->stack_index >= data->num_stack_regs) {
-            printf("    push %s\n", data->var_regs[var_index]);
+            printf("    pushq %s\n", data->var_regs[var_index]);
         }
         else {
-            printf("    mov %s, %s\n", data->var_regs[var_index],
+            printf("    movq %s, %s\n", data->var_regs[var_index],
                    data->virtual_stack[data->stack_index]);
         }
     }
     else {
-        // fprintf(stderr, "%" PRId16 "\n", var_index);
         if (data->stack_index >= data->num_stack_regs) {
-            printf("    push %" PRId16 "(%%rbp)\n", var_index);
+            printf("    pushq %" PRId16 "(%%rbp)\n", var_index);
         }
         else {
-            printf("    mov %" PRId16 "(%%rbp), %s\n", var_index,
+            printf("    movq %" PRId16 "(%%rbp), %s\n", var_index,
                    data->virtual_stack[data->stack_index]);
         }
     }
@@ -72,10 +71,11 @@ void push_var(char name, register_data *data) {
 // Pushes a constant to the "stack"
 void push_val(int64_t val, register_data *data) {
     if (data->stack_index >= data->num_stack_regs) {
-        printf("    push $%" PRId64 "\n", val);
+        printf("    movq $%" PRId64 ", %%rax\n", val);
+        printf("    pushq %%rax\n");
     }
     else {
-        printf("    mov $%" PRId64 ", %s\n", val, data->virtual_stack[data->stack_index]);
+        printf("    movq $%" PRId64 ", %s\n", val, data->virtual_stack[data->stack_index]);
     }
     (data->stack_index)++;
 }
@@ -83,10 +83,10 @@ void push_val(int64_t val, register_data *data) {
 // Pushes a register's value to the "stack"
 void push_reg(char *reg, register_data *data) {
     if (data->stack_index >= data->num_stack_regs) {
-        printf("    push %s\n", reg);
+        printf("    pushq %s\n", reg);
     }
     else {
-        printf("    mov %s, %s\n", reg, data->virtual_stack[data->stack_index]);
+        printf("    movq %s, %s\n", reg, data->virtual_stack[data->stack_index]);
     }
     (data->stack_index)++;
 }
@@ -94,10 +94,10 @@ void push_reg(char *reg, register_data *data) {
 // pops the "stack" to a given register
 void pop(char *reg, register_data *data) {
     if (data->stack_index > data->num_stack_regs) {
-        printf("    pop %s\n", reg);
+        printf("    popq %s\n", reg);
     }
     else {
-        printf("    mov %s, %s\n", data->virtual_stack[data->stack_index - 1], reg);
+        printf("    movq %s, %s\n", data->virtual_stack[data->stack_index - 1], reg);
     }
     (data->stack_index)--;
 }
@@ -297,7 +297,7 @@ bool compile_recursive(node_t *node, register_data *data) {
             pop(data->var_regs[var_index], data);
         }
         else {
-            printf("    mov %%rdi, %" PRId16 "(%%rbp)\n", var_index);
+            printf("    movq %%rdi, %" PRId16 "(%%rbp)\n", var_index);
             (data->stack_index)--;
         }
         assert(data->stack_index == 0);
@@ -410,13 +410,11 @@ void choose_vars(uint8_t *counts, uint8_t *top_counts, char *top_vars) {
     }
 }
 
-/*
 void callee_save(register_data *data, uint8_t len_init_var_regs, char **init_var_regs) {
     char illegal[5] = {0};
     for (int8_t i = 0; i < len_init_var_regs; i++) {
         if (i < data->num_vars) {
             illegal[i] = data->vars[i];
-            // fprintf(stderr, "%c\n", data->vars[i]);
             int16_t j = -8 * (data->vars[i] - 'A' + 1);
             printf("    mov %s, %" PRId16 "(%%rbp)\n", data->var_regs[i], j);
         }
@@ -437,15 +435,12 @@ void callee_save(register_data *data, uint8_t len_init_var_regs, char **init_var
             }
             illegal[i] = c;
             int16_t j = -8 * (c - 'A' + 1);
-            // fprintf(stderr, init_var_regs[i - data->num_vars]);
             printf("    mov %s, %" PRId16 "(%%rbp)\n", init_var_regs[i - data->num_vars],
                    j);
         }
     }
 }
-*/
 
-/*
 void callee_recall(register_data *data, uint8_t len_init_var_regs, char **init_var_regs) {
     char illegal[5] = {0};
     for (int8_t i = 0; i < len_init_var_regs; i++) {
@@ -476,7 +471,6 @@ void callee_recall(register_data *data, uint8_t len_init_var_regs, char **init_v
         }
     }
 }
-*/
 
 // Sets up a register_data struct that includes the registers used to store
 // the more frequently appearing variables, as well as the registers used in
@@ -496,7 +490,7 @@ bool compile_ast(node_t *node) {
     uint8_t num_vars = 0;
     for (; num_vars < len_init_var_regs && top_vars[num_vars] != 0; num_vars++)
         ;
-
+    
     uint8_t num_stack_regs = len_init_calc_regs + len_init_var_regs - num_vars;
 
     char **virtual_stack = (char **) calloc(num_stack_regs, sizeof(char *));
@@ -521,11 +515,11 @@ bool compile_ast(node_t *node) {
     data.num_vars = num_vars;
     data.vars = top_vars;
 
-    // callee_save(&data, len_init_var_regs, init_var_regs);
+    callee_save(&data, len_init_var_regs, init_var_regs);
 
     bool result = compile_recursive(node, &data);
 
-    // callee_recall(&data, len_init_var_regs, init_var_regs);
+    callee_recall(&data, len_init_var_regs, init_var_regs);
 
     free(virtual_stack);
     free(var_regs);
