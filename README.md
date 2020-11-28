@@ -1,5 +1,5 @@
 # teeny-compiler
-A TeenyBASIC compiler, extended from Caltech CS 24 project 2.
+A TeenyBASIC compiler, extended from Caltech CS 24 project 2. Caltech students who plan to take CS 24 should not look further by the Honor Code.
 
 TeenyBASIC is a simplified version of BASIC. It is discussed in more detail here: https://com.puter.systems/20fa/projects/02. 
 The parser, test suite, and Makefile were provided as starter code. My contribution to the project is the compile.c file and some of the compiler.c file.
