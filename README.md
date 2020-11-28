@@ -38,7 +38,7 @@ statement3
 
 IF condition
 
-  true_statements
+	true_statements
   
 END IF
 
@@ -46,11 +46,11 @@ END IF
 
 IF condition
 
-  true_statements
+true_statements
   
 ELSE
 
-  false_statements
+	false_statements
   
 END IF
 
@@ -58,7 +58,7 @@ END IF
 
 WHILE condition
 
-  statements
+	statements
   
 END WHILE
 
