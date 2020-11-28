@@ -7,39 +7,59 @@ The parser, test suite, and Makefile were provided as starter code. My contribut
 # Usage:
 
 Data types are limited to 64 bit ints.
+
 The only builtin arithmetic operations are +, -, *, /.
+
 Variable names are limited to the characters A through Z.
+
 Only comparisons of equality (=), greater than (>), and less than (<) are provided.
 
 It is limited to the following types of statements.
 
 // Print the value of expression to stdout
+
 PRINT expression
 
 // Store the value represented by expression in variable
+
 LET variable = expression
 
 // Execute statement1, statement2, statement3, ...
+
 statement1
+
 statement2
+
 statement3
+
 ...
 
 // If condition is true, execute true_statements
+
 IF condition
+
   true_statements
+  
 END IF
 
 // If condition is true, execute true_statements. Else, execute false_statements.
+
 IF condition
+
   true_statements
+  
 ELSE
+
   false_statements
+  
 END IF
 
 // Execute statements until condition becomes false.
+
 WHILE condition
+
   statements
+  
 END WHILE
 
 The provided Makefile can be used to produce the compiler binary. 
