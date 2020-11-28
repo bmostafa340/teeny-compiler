@@ -16,15 +16,15 @@ Only comparisons of equality (=), greater than (>), and less than (<) are provid
 
 It is limited to the following types of statements.
 
-// Print the value of expression to stdout
+Print the value of expression to stdout
 
 	PRINT expression
 
-// Store the value represented by expression in variable
+Store the value represented by expression in variable
 
 	LET variable = expression
 
-// Execute statement1, statement2, statement3, ...
+Execute statement1, statement2, statement3, ...
 
 	statement1
 
@@ -32,9 +32,9 @@ It is limited to the following types of statements.
 
 	statement3
 
-...
+	...
 
-// If condition is true, execute true_statements
+If condition is true, execute true_statements
 
 	IF condition
 
@@ -42,7 +42,7 @@ It is limited to the following types of statements.
   
 	END IF
 
-// If condition is true, execute true_statements. Else, execute false_statements.
+If condition is true, execute true_statements. Else, execute false_statements.
 
 	IF condition
 
@@ -54,7 +54,7 @@ It is limited to the following types of statements.
   
 	END IF
 
-// Execute statements until condition becomes false.
+Execute statements until condition becomes false.
 
 	WHILE condition
 
