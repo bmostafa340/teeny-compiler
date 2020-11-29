@@ -206,9 +206,9 @@ void asm_operate(binary_node_t *bin_node, register_data *data, bool swap) {
     }
 }
 
-// Computes the constant represented by node
-// precondition:
-//    node is a NUM or an expression of constants
+/* Computes the constant represented by node
+ * Precondition: node is an expression of constants
+ */
 int64_t constant(node_t *node) {
     if (node->type == NUM) {
         num_node_t *num_node = (num_node_t *) node;
