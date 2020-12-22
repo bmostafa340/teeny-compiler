@@ -1,4 +1,4 @@
-CC = clang-with-asan
+CC = clang
 CFLAGS = -Iinclude -Wall -Wextra -fno-sanitize=integer
 ASM = clang
 
