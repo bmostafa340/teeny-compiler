@@ -66,9 +66,6 @@ int main(int argc, char *argv[]) {
         return 2;
     }
 
-    // Display the AST for debugging purposes
-    print_ast(ast);
-
     // Compile the AST into assembly instructions
     if (!compile_ast(ast)) {
         free_ast(ast);
